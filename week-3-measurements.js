@@ -15,6 +15,7 @@
  */
 
 function convert(originalMeasurement, conversionTo) {
+    console.log(originalMeasurement, conversionTo);
     // Strategy: Convert everything to grams, then from grams to anything.
     if (originalMeasurement === undefined) {
         return undefined;
@@ -27,26 +28,76 @@ function convert(originalMeasurement, conversionTo) {
         return amount;
     }
 
+    const weights = ['g', 'oz', 'lb'];
+    const temps = ['k', 'f', 'c'];
+
+    if (weights.indexOf(measurementUnit) !== -1 && weights.indexOf(conversionTo) === -1) {
+        throw new Error("Improper conversion");
+    } else if (temps.indexOf(measurementUnit) !== -1 && temps.indexOf(conversionTo) === -1) {
+        throw new Error("Improper conversion");
+    }
+
     const conversionsToG = {
-        'g': 1,
-        'kg': 0.001,
-        'lb': 453.59290944,
-        'oz': 28.34949254,
+        'g': (x) => x * 1,
+        'kg': (x) => x * 0.001,
+        'lb': (x) => x * 453.59290944,
+        'oz': (x) => x * 28.34949254,
     };
 
-    const amountInGrams = Math.round(amount * conversionsToG[measurementUnit] * 1000000) / 1000000;
+    const conversionsToC = {
+        'c': (x) => x * 1,
+        'f': (x) => (x - 32) * (5 / 9),
+        'k': (x) => x - 273.15,
+    }
+
+    const conversionFormulas = (weights.indexOf(measurementUnit) !== -1) ? conversionsToG : conversionsToC;
+
+    const amountInDefaultMeasurement = Math.round(conversionFormulas[measurementUnit](amount) * 1000000) / 1000000;
 
     const conversionsFromG = {
-        'g': 1,
-        'kg': 1000,
-        'lb': 1 / 453.59290944,
-        'oz': 1 / 28.34949254,
+        'g': (x) => x * 1,
+        'kg': (x) => x * 1000,
+        'lb': (x) => x * 1 / 453.59290944,
+        'oz': (x) => x * 1 / 28.34949254,
     };
 
-    const convertedAmount = Math.round(amountInGrams * conversionsFromG[conversionTo] * 10000) / 10000;
+    const conversionsFromC = {
+        'c': (x) => x * 1,
+        'f': (x) => (x * 1.8) + 32,
+        'k': (x) => x + 273.15,
+    };
+
+    const conversionFormulas2 = (weights.indexOf(conversionTo) !== -1) ? conversionsFromG : conversionsFromC;
+
+    const convertedAmount = Math.round(conversionFormulas2[conversionTo](amountInDefaultMeasurement) * 10000) / 10000;
 
     return convertedAmount;
 }
+
+/**
+ * All Tests Pass demo fuzzers.
+ */
+
+function atpAmountFuzzer() {
+    return (Math.round(Math.random() * 500000) / 1000) + atpUnitFuzzer();
+}
+
+function atpUnitFuzzer() {
+    const length = (Math.random() > 0.5) ? 1 : 2;
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    }
+    return result;
+}
+
+/**
+ * Unit tests, don't update anything after this line.
+ */
 
 describe("Week 3 - Measurements", function() {
     it ("should return nothing if passed nothing.", function() {
@@ -94,5 +145,11 @@ describe("Week 3 - Measurements", function() {
 
     it ("should convert fahrenheit to kelvin", function() {
         chai.assert.equal(convert("290k", "f"), 62.33, "");
+    });
+
+    it ("for arbitrary input it doesn't understand, it should throw errors", function() {
+       for (let i = 0; i < 100; i++) {
+           chai.assert.throws(() => {console.log(convert(atpAmountFuzzer(), atpUnitFuzzer()))});
+       }
     });
 });
