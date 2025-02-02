@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "A template for HTML and CSS",
   "main": "index.html",
+  "type": "module",
   "scripts": {
-    "start": "serve"
+    "start": "serve",
+    "cli-test": "nodemon --exec 'mocha week-4-measurements.js'"
   },
   "keywords": [
     "html",
@@ -13,6 +15,7 @@
   "author": "Ives van Hoorne",
   "license": "MIT",
   "devDependencies": {
+    "nodemon": "^3.1.9",
     "serve": "14.2.4"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",

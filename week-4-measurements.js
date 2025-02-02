@@ -17,7 +17,6 @@
 import { assert } from "./node_modules/chai/chai.js";
 
 function convert(originalMeasurement, conversionTo) {
-    console.log(originalMeasurement, conversionTo);
     // Strategy: Convert everything to grams, then from grams to anything.
     if (originalMeasurement === undefined) {
         return undefined;
