@@ -4,19 +4,18 @@
     <meta charset="utf-8" />
     <title>All Tests Pass - Week 4 - Measurements Part 3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+    <link rel="stylesheet" href="./node_modules/mocha/mocha.css" />
 </head>
 <body>
 <div id="mocha"></div>
 
-<script src="https://unpkg.com/chai@4/chai.js"></script>
-<script src="https://unpkg.com/mocha/mocha.js"></script>
+<script src="./node_modules/mocha/mocha.js"></script>
 
 <script class="mocha-init">
     mocha.setup("bdd");
     mocha.checkLeaks(false);
 </script>
-<script src="week-3-measurements.js"></script>
+<script type="module" src="week-4-measurements.js"></script>
 <script class="mocha-exec">
     mocha.run();
 </script>

@@ -1,5 +1,5 @@
 /**
- * All Tests Pass: Week 3 - Measurements Part 2
+ * All Tests Pass: Week 4 - Measurements Part 3
  *
  *
  * Implement a function `convert` that takes two inputs.
@@ -13,6 +13,8 @@
  * Measurement conversions reference: https://www.nist.gov/pml/owm/approximate-conversions-us-customary-measures-metric
  *
  */
+
+import { assert } from "./node_modules/chai/chai.js";
 
 function convert(originalMeasurement, conversionTo) {
     console.log(originalMeasurement, conversionTo);
@@ -99,57 +101,57 @@ function atpUnitFuzzer() {
  * Unit tests, don't update anything after this line.
  */
 
-describe("Week 3 - Measurements", function() {
+describe("Week 4 - Measurements", function() {
     it ("should return nothing if passed nothing.", function() {
-        chai.assert(convert() == undefined, "Nothing passed");
+        assert(convert() == undefined, "Nothing passed");
     });
 
     it ("should return a matching number if no conversion is requested.", function() {
-        chai.assert.equal(convert("10g"), 10);
+        assert.equal(convert("10g"), 10);
     });
 
     it ("should convert ounces to grams.", function() {
-        chai.assert.equal(convert("10oz", "g"), 283.4949, "10oz == 283.4949g");
+        assert.equal(convert("10oz", "g"), 283.4949, "10oz == 283.4949g");
     });
 
     it ("should convert grams to ounces.", function() {
-        chai.assert.equal(convert("50g", "oz"), 1.7637, "50g == 1.7637oz");
+        assert.equal(convert("50g", "oz"), 1.7637, "50g == 1.7637oz");
     });
 
     it ("should convert pounds to grams.", function() {
-        chai.assert.equal(convert("10lb", "g"), 4535.9291, "10lb == 4535.9291g");
+        assert.equal(convert("10lb", "g"), 4535.9291, "10lb == 4535.9291g");
     });
 
     it ("should convert grams to pounds.", function() {
-        chai.assert.equal(convert("500g", "lb"), 1.1023, "500g == 1.1023lb");
+        assert.equal(convert("500g", "lb"), 1.1023, "500g == 1.1023lb");
     });
 
     it ("should convert ounces to pounds.", function() {
-        chai.assert.equal(convert("16oz", "lb"), 1, "");
+        assert.equal(convert("16oz", "lb"), 1, "");
     });
 
     it ("should throw an error if converting from a weight to temperature, or temperature to weight", function() {
         // Quirk with assert.throws, need to pass a function so it can wrap it in a try/catch.
-        chai.assert.throws(() => {convert("100f", "g")}, Error, "Improper conversion");
+        assert.throws(() => {convert("100f", "g")}, Error, "Improper conversion");
     });
 
     it ("should convert fahrenheit to celcius", function() {
-        chai.assert.equal(convert("100f", "c"), 37.7778, "");
-        chai.assert.equal(convert("0f", "c"), -17.7778, "");
+        assert.equal(convert("100f", "c"), 37.7778, "");
+        assert.equal(convert("0f", "c"), -17.7778, "");
     });
 
     it ("should convert celcius to fahrenheit", function() {
-        chai.assert.equal(convert("100c", "f"), 212, "");
-        chai.assert.equal(convert("32f", "c"), 0, "");
+        assert.equal(convert("100c", "f"), 212, "");
+        assert.equal(convert("32f", "c"), 0, "");
     });
 
     it ("should convert fahrenheit to kelvin", function() {
-        chai.assert.equal(convert("290k", "f"), 62.33, "");
+        assert.equal(convert("290k", "f"), 62.33, "");
     });
 
     it ("for arbitrary input it doesn't understand, it should throw errors", function() {
-       for (let i = 0; i < 100; i++) {
-           chai.assert.throws(() => {console.log(convert(atpAmountFuzzer(), atpUnitFuzzer()))});
+       for (let i = 0; i < 1000; i++) {
+           assert.throws(() => {console.log(convert(atpAmountFuzzer(), atpUnitFuzzer()))});
        }
     });
 });
