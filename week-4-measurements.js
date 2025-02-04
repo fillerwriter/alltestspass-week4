@@ -29,12 +29,81 @@ function convert(originalMeasurement, conversionTo) {
         return amount;
     }
 
+    const conversionUnits = {
+        g: {
+            type: 'weight',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        kg: {
+            type: 'weight',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        oz: {
+            type: 'weight',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        lb: {
+            type: 'weight',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        k: {
+            type: 'temp',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        f: {
+            type: 'temp',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        c: {
+            type: 'temp',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        m: {
+            type: 'temp',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        cm: {
+            type: 'distance',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        in: {
+            type: 'distance',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        ft: {
+            type: 'distance',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        mi: {
+            type: 'distance',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+        km: {
+            type: 'distance',
+            toBase: () => 1,
+            fromBase: () => 1,
+        },
+    };
+
+    const conversionUnitFromData = conversionUnits[measurementUnit];
+    const conversionUnitToData = conversionUnits[conversionTo];
+
     const weights = ['g', 'oz', 'lb'];
     const temps = ['k', 'f', 'c'];
 
-    if (weights.indexOf(measurementUnit) !== -1 && weights.indexOf(conversionTo) === -1) {
-        throw new Error("Improper conversion");
-    } else if (temps.indexOf(measurementUnit) !== -1 && temps.indexOf(conversionTo) === -1) {
+    if (conversionUnitFromData.type !== conversionUnitToData.type) {
         throw new Error("Improper conversion");
     }
 
@@ -87,12 +156,26 @@ function atpUnitFuzzer() {
     const length = (Math.random() > 0.5) ? 1 : 2;
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+    const validMeasurementUnits = ['g', 'kg', 'oz', 'lb', 'c', 'f', 'k', 'm', 'cm', 'in', 'ft', 'mi', 'km'];
+
     const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        counter += 1;
+    let invalid = false;
+
+    while (invalid === false) {
+        let counter = 0;
+
+        while (counter < length) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            counter += 1;
+        }
+
+        if (validMeasurementUnits.indexOf(result.toLowerCase()) === -1) {
+            invalid = true;
+        }
     }
+
+
     return result;
 }
 
