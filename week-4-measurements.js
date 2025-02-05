@@ -231,6 +231,22 @@ describe("Week 4 - Measurements", function() {
         assert.equal(convert("290k", "f"), 62.33, "");
     });
 
+    it ("should convert inches to feet", function() {
+        assert.equal(convert("12in", "ft"), 1, "12 inches == 1 foot");
+    });
+
+    it ("should convert feet to inches", function() {
+        assert.equal(convert("3ft", "in"), 36, "3 feet == 36 inches");
+    });
+
+    it ("should convert inches to centimeters", function() {
+        assert.equal(convert("6in", "cm"), 15.24, "6 inches == 15.24 cm");
+    });
+
+    it ("should convert miles into kilometers", function() {
+        assert.equal(convert("100mi", "km"), 160.9344, "100 miles == 160.9344 kilometers");
+    });
+
     it ("for arbitrary input it doesn't understand, it should throw errors", function() {
        for (let i = 0; i < 1000; i++) {
            assert.throws(() => {console.log(convert(atpAmountFuzzer(), atpUnitFuzzer()))});
