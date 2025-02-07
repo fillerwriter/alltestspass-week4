@@ -32,114 +32,81 @@ function convert(originalMeasurement, conversionTo) {
     const conversionUnits = {
         g: {
             type: 'weight',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 1,
+            fromBase: (x) => x * 1,
         },
         kg: {
             type: 'weight',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 0.001,
+            fromBase: (x) => x * 1000,
         },
         oz: {
             type: 'weight',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 28.34949254,
+            fromBase: (x) => x * 1 / 28.34949254,
         },
         lb: {
             type: 'weight',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 453.59290944,
+            fromBase: (x) => x * 1 / 453.59290944,
         },
         k: {
             type: 'temp',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x - 273.15,
+            fromBase: (x) => x + 273.15,
         },
         f: {
             type: 'temp',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => (x - 32) * (5 / 9),
+            fromBase: (x) => (x * 1.8) + 32,
         },
         c: {
             type: 'temp',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 1,
+            fromBase: (x) => x * 1,
         },
         m: {
             type: 'temp',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 0.001,
+            fromBase: (x) => x * 1000,
         },
         cm: {
             type: 'distance',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 1,
+            fromBase: (x) => x * 1,
         },
         in: {
             type: 'distance',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 2.54,
+            fromBase: (x) => x * 0.3937,
         },
         ft: {
             type: 'distance',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 30.48,
+            fromBase: (x) => x * (1 / 30.48),
         },
         mi: {
             type: 'distance',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 160934.44979,
+            fromBase: (x) => x * 0.0000062137,
         },
         km: {
             type: 'distance',
-            toBase: () => 1,
-            fromBase: () => 1,
+            toBase: (x) => x * 100000,
+            fromBase: (x) => x * 0.00001,
         },
     };
 
     const conversionUnitFromData = conversionUnits[measurementUnit];
     const conversionUnitToData = conversionUnits[conversionTo];
 
-    const weights = ['g', 'oz', 'lb'];
-    const temps = ['k', 'f', 'c'];
-
     if (conversionUnitFromData.type !== conversionUnitToData.type) {
         throw new Error("Improper conversion");
     }
 
-    const conversionsToG = {
-        'g': (x) => x * 1,
-        'kg': (x) => x * 0.001,
-        'lb': (x) => x * 453.59290944,
-        'oz': (x) => x * 28.34949254,
-    };
-
-    const conversionsToC = {
-        'c': (x) => x * 1,
-        'f': (x) => (x - 32) * (5 / 9),
-        'k': (x) => x - 273.15,
-    }
-
-    const conversionFormulas = (weights.indexOf(measurementUnit) !== -1) ? conversionsToG : conversionsToC;
-
-    const amountInDefaultMeasurement = Math.round(conversionFormulas[measurementUnit](amount) * 1000000) / 1000000;
-
-    const conversionsFromG = {
-        'g': (x) => x * 1,
-        'kg': (x) => x * 1000,
-        'lb': (x) => x * 1 / 453.59290944,
-        'oz': (x) => x * 1 / 28.34949254,
-    };
-
-    const conversionsFromC = {
-        'c': (x) => x * 1,
-        'f': (x) => (x * 1.8) + 32,
-        'k': (x) => x + 273.15,
-    };
-
-    const conversionFormulas2 = (weights.indexOf(conversionTo) !== -1) ? conversionsFromG : conversionsFromC;
-
-    const convertedAmount = Math.round(conversionFormulas2[conversionTo](amountInDefaultMeasurement) * 10000) / 10000;
+    const amountInDefaultMeasurement = Math.round(conversionUnitFromData.toBase(amount) * 1000000) / 1000000;
+    
+    const convertedAmount = Math.round(conversionUnitToData.fromBase(amountInDefaultMeasurement) * 10000) / 10000;
 
     return convertedAmount;
 }
@@ -185,7 +152,7 @@ function atpUnitFuzzer() {
 
 describe("Week 4 - Measurements", function() {
     it ("should return nothing if passed nothing.", function() {
-        assert(convert() == undefined, "Nothing passed");
+        assert(convert() === undefined, "Nothing passed");
     });
 
     it ("should return a matching number if no conversion is requested.", function() {
