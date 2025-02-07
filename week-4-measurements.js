@@ -104,8 +104,8 @@ function convert(originalMeasurement, conversionTo) {
         throw new Error("Improper conversion");
     }
 
-    const amountInDefaultMeasurement = Math.round(conversionUnitFromData.toBase(amount) * 1000000) / 1000000;
-    
+    const amountInDefaultMeasurement = Math.round(conversionUnitFromData.toBase(amount) * 10000000) / 10000000;
+
     const convertedAmount = Math.round(conversionUnitToData.fromBase(amountInDefaultMeasurement) * 10000) / 10000;
 
     return convertedAmount;
