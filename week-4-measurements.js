@@ -78,12 +78,30 @@ function convert(originalMeasurement, conversionTo) {
         in: {
             type: 'distance',
             toBase: (x) => x * 2.54,
-            fromBase: (x) => x * 0.3937,
+            fromBase: (x) => {
+                let tmp = x * 0.3937;
+                let tmp2 = Math.round(tmp);
+
+                if (Math.abs(tmp2 - tmp) < 0.001) {
+                    return tmp2;
+                } else {
+                    return tmp;
+                }
+            },
         },
         ft: {
             type: 'distance',
             toBase: (x) => x * 30.48,
-            fromBase: (x) => x * (1 / 30.48),
+            fromBase: (x) => {
+                let tmp = x * (1 / 30.48);
+                let tmp2 = Math.round(tmp);
+
+                if (Math.abs(tmp2 - tmp) < 0.001) {
+                    return tmp2;
+                } else {
+                    return tmp;
+                }
+            },
         },
         mi: {
             type: 'distance',
@@ -104,7 +122,7 @@ function convert(originalMeasurement, conversionTo) {
         throw new Error("Improper conversion");
     }
 
-    const amountInDefaultMeasurement = Math.round(conversionUnitFromData.toBase(amount) * 10000000) / 10000000;
+    const amountInDefaultMeasurement = Math.round(conversionUnitFromData.toBase(amount) * 1000000) / 1000000;
 
     const convertedAmount = Math.round(conversionUnitToData.fromBase(amountInDefaultMeasurement) * 10000) / 10000;
 
